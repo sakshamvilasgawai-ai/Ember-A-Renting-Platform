@@ -1,0 +1,118 @@
+<% layout('layouts/boilerplate') %>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>&nbsp;Rent  &nbsp;Freely.<br/><span><i>Explore</i>&nbsp; More.</span></h1>
+  <p>Rent vehicles, gadgets, and equipment from trusted locals and enjoy your trip like never before.</p>
+
+  <div class="search-bar">
+  <div>
+    <p>What are you looking for?</p>
+    <input type="text" placeholder="🔍 Search vehicles, cameras, laptops..." id="searchInput"/>
+  </div>
+  <div>
+    <p>Location</p>
+    <input type="text" placeholder="📍 Goa, India" id="locationInput"/>
+  </div>
+  <div>
+    <p>From – To</p>
+    <input type="date" id="dateInput"/>
+  </div>
+  <div>
+    <button onclick="filterListings()">Search</button>
+  </div>
+</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-item"><div class="num">10K+</div><div class="label">Happy Users</div></div>
+  <div class="stat-item"><div class="num">5K+</div><div class="label">Items Listed</div></div>
+  <div class="stat-item"><div class="num">50+</div><div class="label">Cities</div></div>
+  <div class="stat-item"><div class="num">4.8 ⭐</div><div class="label">Avg Rating</div></div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+  <div class="section-header">
+    <h2>Browse by Category</h2>
+    <a href="/listings">View all →</a>
+  </div>
+  <div class="categories-grid">
+    <a href="/listings?category=Bikes" class="cat-card">
+      <span class="icon">🏍️</span>
+      <div class="name">Bikes</div>
+      <div class="count">120+</div>
+    </a>
+    <a href="/listings?category=Cars" class="cat-card">
+      <span class="icon">🚗</span>
+      <div class="name">Cars</div>
+      <div class="count">80+</div>
+    </a>
+    <a href="/listings?category=Scooters" class="cat-card">
+      <span class="icon">🛵</span>
+      <div class="name">Scooters</div>
+      <div class="count">90+</div>
+    </a>
+    <a href="/listings?category=Cameras" class="cat-card">
+      <span class="icon">📷</span>
+      <div class="name">Cameras</div>
+      <div class="count">150+</div>
+    </a>
+    <a href="/listings?category=Laptops" class="cat-card">
+      <span class="icon">💻</span>
+      <div class="name">Laptops</div>
+      <div class="count">60+</div>
+    </a>
+    <a href="/listings?category=Projectors" class="cat-card">
+      <span class="icon">📽️</span>
+      <div class="name">Projectors</div>
+      <div class="count">40+</div>
+    </a>
+    <a href="/listings?category=Drones" class="cat-card">
+      <span class="icon">🚁</span>
+      <div class="name">Drones</div>
+      <div class="count">70+</div>
+    </a>
+    <a href="/listings?category=Audio" class="cat-card">
+      <span class="icon">🏕️</span>
+      <div class="name">Hobbies</div>
+      <div class="count">50+</div>
+    </a>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<div class="section">
+  <div class="section-header">
+    <h2>Popular Rentals Near You</h2>
+    <a href="/listings">View all listings →</a>
+  </div>
+  <div class="listings-grid" id="listingsGrid">
+    <% for (let listing of allListings) { %>
+      <a href="/listings/<%= listing._id %>" class="listing-card">
+        <img src="<%= listing.image.url %>" alt="<%= listing.title %>"
+             onerror="this.src='https://placehold.co/400x300?text=No+Image'"/>
+        <div class="card-body">
+          <h3><%= listing.title %></h3>
+          <div class="card-location">
+            📍 <%= listing.location %>, <%= listing.country %>
+          </div>
+          <div class="card-footer">
+            <div class="price">₹<%= listing.price.toLocaleString('en-IN') %> <span>/ day</span></div>
+            <div class="rating">⭐ 4.8</div>
+          </div>
+        </div>
+      </a>
+    <% } %>
+  </div>
+</div>
+
+<!-- HOST CTA -->
+<div class="cta-banner">
+  <div>
+  <h2>List your assets & start earning</h2>
+  <p>Join thousands of trusted owners on Ember.</p>
+  </div>
+  <a href="/listings/new">Become a Host →</a>
+</div>

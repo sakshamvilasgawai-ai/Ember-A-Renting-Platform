@@ -1,0 +1,149 @@
+<% layout('layouts/boilerplate') %>
+
+<div style="max-width:1100px;margin:1rem auto;padding:0 2rem;">
+  <nav style="font-size:0.85rem;color:#78716C;margin-bottom:1.5rem;">
+    <a href="/listings" style="color:#F97316;text-decoration:none;">Home</a> › 
+    <span><%= listing.category || 'Listings' %></span> › 
+    <span><%= listing.title %></span>
+  </nav>
+</div>
+
+<div class="show-container">
+  <!-- LEFT -->
+  <div>
+    <div class="show-images">
+      <img src="<%= listing.image.url %>" alt="<%= listing.title %>"
+           onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800'"/>
+    </div>
+
+    <div class="show-title"><%= listing.title %></div>
+    <div class="show-meta">
+      <span class="badge"><%= listing.category || 'Rental' %></span>
+      <span>📍 <%= listing.location %>, <%= listing.country %></span>
+      <span>⭐ 4.9 (27 reviews)</span>
+    </div>
+
+    <% if (listing.owner) { %>
+      <div style="display:flex;align-items:center;gap:0.8rem;padding:1rem;background:#F5F5F4;border-radius:12px;margin-bottom:1.5rem;">
+        <div style="width:42px;height:42px;border-radius:50%;background:#F97316;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">
+          <%= listing.owner.username[0].toUpperCase() %>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;"><%= listing.owner.username %></div>
+          <div style="font-size:0.8rem;color:#78716C;">Member since 2023 · ⭐ 4.9</div>
+        </div>
+      </div>
+    <% } %>
+
+    <p class="show-description"><%= listing.description %></p>
+
+    <!-- REVIEWS SECTION -->
+    <div class="reviews-section">
+
+  <% if (currUser) { %>
+  <div class="review-form-card">
+    <h4>Leave a Review</h4>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST">
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div class="star-rating">
+          <input type="radio" id="rate5" name="review[rating]" value="5"/><label for="rate5">&#9733;</label>
+          <input type="radio" id="rate4" name="review[rating]" value="4"/><label for="rate4">&#9733;</label>
+          <input type="radio" id="rate3" name="review[rating]" value="3"/><label for="rate3">&#9733;</label>
+          <input type="radio" id="rate2" name="review[rating]" value="2"/><label for="rate2">&#9733;</label>
+          <input type="radio" id="rate1" name="review[rating]" value="1"/><label for="rate1">&#9733;</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea name="review[comment]" rows="3" placeholder="Share your experience..."></textarea>
+      </div>
+      <button type="submit" class="btn-book" style="width:auto;padding:0.7rem 1.5rem;">Post Review</button>
+    </form>
+  </div>
+  <% } %>
+
+  <% if (listing.reviews.length > 0) { %>
+  <h4 style="margin:2rem 0 1rem;">Recent Feedbacks</h4>
+  <div class="feedback-list">
+    <% for (let review of listing.reviews) { %>
+    <div class="feedback-card">
+      <div class="feedback-avatar">
+        <%= review.author ? review.author.username.charAt(0).toUpperCase() : 'U' %>
+      </div>
+      <div class="feedback-body">
+        <div class="feedback-header">
+          <span class="feedback-name"><%= review.author ? review.author.username : 'User' %></span>
+          <div class="feedback-stars">
+            <% for (let i = 1; i <= 5; i++) { %>
+              <span class="<%= i <= review.rating ? 'star filled' : 'star' %>">&#9733;</span>
+            <% } %>
+          </div>
+        </div>
+        <p class="feedback-comment"><%= review.comment %></p>
+        <% if (currUser && review.author && currUser._id.equals(review.author._id)) { %>
+        <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" style="margin-top:0.4rem;">
+          <button type="submit" class="delete-review-btn">&#128465; Delete</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+  <% } %>
+
+</div>
+  </div>
+
+  <!-- RIGHT: BOOKING CARD -->
+  <div>
+    <div class="booking-card">
+      <div class="big-price">
+        ₹<%= listing.price.toLocaleString('en-IN') %> <span>/ day</span>
+      </div>
+
+      <div class="form-group">
+        <label>From</label>
+        <input type="date" />
+      </div>
+      <div class="form-group">
+        <label>To</label>
+        <input type="date" />
+      </div>
+
+      <div style="background:#FFF7ED;border-radius:10px;padding:0.8rem;margin-bottom:1rem;font-size:0.85rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
+          <span>Rental price</span>
+          <span>₹<%= listing.price.toLocaleString('en-IN') %></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;color:#78716C;">
+          <span>Security deposit (refundable)</span>
+          <span>₹500</span>
+        </div>
+      </div>
+
+      <% if (currUser) { %>
+        <button class="btn-book">Book Now</button>
+      <% } else { %>
+        <a href="/login" class="btn-book" style="text-align:center;display:block;text-decoration:none;">
+          Login to Book
+        </a>
+      <% } %>
+
+      <a href="#" class="btn-outline">💬 Chat with Owner</a>
+
+      <% if (currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #E7E5E4;">
+          <a href="/listings/<%= listing._id %>/edit" class="btn-outline"
+             style="margin-bottom:0.5rem;">✏️ Edit Listing</a>
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+            <button type="submit"
+              style="width:100%;background:#FFF1F2;color:#BE123C;border:1px solid #FECDD3;border-radius:12px;padding:0.7rem;font-family:inherit;font-weight:600;cursor:pointer;">
+              🗑 Delete Listing
+            </button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="logo">🔥Ember</div>
+    <h2>Create your account</h2>
+
+    <form action="/signup" method="POST">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Choose a username" required/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Create a strong password" required/>
+      </div>
+      <button type="submit" class="btn-book">Create Account →</button>
+    </form>
+
+    <p style="text-align:center;margin-top:1.2rem;font-size:0.88rem;color:#78716C;">
+      Already have an account? <a href="/login" style="color:#F97316;font-weight:600;">Login</a>
+    </p>
+  </div>
+</div>

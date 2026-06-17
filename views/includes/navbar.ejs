@@ -1,0 +1,18 @@
+<nav class="rentora-nav">
+  <a href="/listings" class="nav-logo">
+   🔥Ember
+  </a>
+
+  <div class="nav-links">
+    <a href="/listings">Listings</a>
+    <a href="/listings?category=Bikes">Categories</a>
+
+    <% if (currUser) { %>
+      <a href="/listings/new" class="btn-primary">+ List Item</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup" class="btn-primary">Sign Up</a>
+    <% } %>
+  </div>
+</nav>
